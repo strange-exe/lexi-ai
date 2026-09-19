@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="lexi-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#4f46e5" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="sparkle-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Modern App Squircle -->
+  <rect width="48" height="48" rx="12" fill="url(#lexi-bg)" />
+  <rect x="1" y="1" width="46" height="46" rx="11" stroke="white" stroke-opacity="0.2" stroke-width="1.5" />
+
+  <!-- Scales of Justice Symbolism -->
+  <!-- Central Beam Column -->
+  <line x1="24" y1="12" x2="24" y2="37" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+  
+  <!-- Balance Crossbeam -->
+  <line x1="12" y1="18" x2="36" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Left Scale Pan -->
+  <path d="M12 18L8 26M12 18L16 26" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.75" />
+  <path d="M7 26C7 29.5 17 29.5 17 26" stroke="white" stroke-width="2" stroke-linecap="round" fill="white" fill-opacity="0.15" />
+
+  <!-- Right Scale Pan -->
+  <path d="M36 18L32 26M36 18L40 26" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.75" />
+  <path d="M31 26C31 29.5 41 29.5 41 26" stroke="white" stroke-width="2" stroke-linecap="round" fill="white" fill-opacity="0.15" />
+
+  <!-- Sturdy Base -->
+  <line x1="18" y1="37" x2="30" y2="37" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Intelligent AI Sparkle Star -->
+  <path d="M24 6L25.4 10.6L30 12L25.4 13.4L24 18L22.6 13.4L18 12L22.6 10.6Z" fill="url(#sparkle-gold)" />
+</svg>

@@ -5,6 +5,11 @@ import DisclaimerBanner from '@/components/DisclaimerBanner';
 export const metadata: Metadata = {
   title: 'Lexi AI — Accessible Legal Intelligence & Assistance',
   description: 'GenAI-powered platform that democratizes legal information, contract analysis, clause simplification, obligation tracking, and attorney consultation preparation.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
