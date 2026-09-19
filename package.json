@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "tsx --test tests/legal-engine.test.ts tests/use-cases.test.ts tests/security.test.ts"
+    "test": "tsx --test tests/legal-engine.test.ts tests/use-cases.test.ts tests/security.test.ts tests/api-routes.test.ts tests/efficiency-and-performance.test.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -23,6 +23,8 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "tsx": "^4.23.13",

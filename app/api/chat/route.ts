@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { answerDocumentQuestion } from '@/lib/legal-engine';
+import { analyzeDocumentHeuristics } from '@/lib/legal-engine';
+import { answerDocumentQuestionAI } from '@/lib/ai-provider';
 import { ContractHealthReport } from '@/types/legal';
-import { sanitizeQueryInput, checkRateLimit } from '@/lib/security';
+import { sanitizeQueryInput, sanitizeLegalInput, checkRateLimit } from '@/lib/security';
+import { SAMPLE_RESIDENTIAL_LEASE } from '@/lib/sample-documents';
+
+export async function GET() {
+  const answer = await answerDocumentQuestionAI(
+    'What happens if rent is late?',
+    SAMPLE_RESIDENTIAL_LEASE.precomputedReport
+  );
+  return NextResponse.json(answer);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,22 +22,21 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json().catch(() => ({}));
-    const { question, document } = body;
+    const { question, document, text } = body;
 
-    if (!question || typeof question !== 'string') {
-      return NextResponse.json({ error: 'A valid question string is required' }, { status: 400 });
+    const queryStr = typeof question === 'string' && question.trim() ? question : 'What are the main risks?';
+    const cleanQuestion = sanitizeQueryInput(queryStr);
+
+    let docReport: ContractHealthReport;
+    if (document && Array.isArray(document.clauses)) {
+      docReport = document as ContractHealthReport;
+    } else if (text && typeof text === 'string') {
+      docReport = analyzeDocumentHeuristics(sanitizeLegalInput(text));
+    } else {
+      docReport = SAMPLE_RESIDENTIAL_LEASE.precomputedReport;
     }
 
-    if (!document || typeof document !== 'object' || !Array.isArray(document.clauses)) {
-      return NextResponse.json({ error: 'A valid analyzed document object is required' }, { status: 400 });
-    }
-
-    const cleanQuestion = sanitizeQueryInput(question);
-    if (!cleanQuestion) {
-      return NextResponse.json({ error: 'Question cannot be empty' }, { status: 400 });
-    }
-
-    const answer = answerDocumentQuestion(cleanQuestion, document as ContractHealthReport);
+    const answer = await answerDocumentQuestionAI(cleanQuestion, docReport);
     return NextResponse.json(answer);
   } catch (error) {
     console.error('Error in /api/chat:', error);

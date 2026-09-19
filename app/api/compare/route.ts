@@ -3,6 +3,10 @@ import { SAMPLE_COMPARISON_DATA } from '@/lib/sample-documents';
 import { sanitizeLegalInput, checkRateLimit } from '@/lib/security';
 import { comparePoliciesAI } from '@/lib/ai-provider';
 
+export async function GET() {
+  return NextResponse.json(SAMPLE_COMPARISON_DATA);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const ip = req.headers.get('x-forwarded-for') || 'anonymous-client';

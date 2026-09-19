@@ -136,7 +136,7 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
                             {cite.clauseTitle}
                           </span>
                           <p className="text-[11px] text-slate-500 line-clamp-1 italic">
-                            "{cite.quote}"
+                            &ldquo;{cite.quote}&rdquo;
                           </p>
                         </div>
                         <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-500 shrink-0 mt-0.5" />

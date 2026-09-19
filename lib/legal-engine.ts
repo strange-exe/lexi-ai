@@ -75,6 +75,8 @@ export function segmentDocumentIntoClauses(text: string): Array<{ title: string;
   return sections;
 }
 
+const heuristicCache = new Map<string, ContractHealthReport>();
+
 export function analyzeDocumentHeuristics(rawText: string, docTitle?: string): ContractHealthReport {
   // Check if matches known samples for pixel-perfect demonstration
   if (rawText.includes('Apex Property Holdings LLC') || rawText.includes('RESIDENTIAL LEASE AGREEMENT')) {
@@ -82,6 +84,11 @@ export function analyzeDocumentHeuristics(rawText: string, docTitle?: string): C
   }
   if (rawText.includes('Nexus Global Enterprises') || rawText.includes('Alex Morgan')) {
     return SAMPLE_FREELANCE_MSA.precomputedReport;
+  }
+
+  const cacheKey = `${docTitle || 'doc'}_${rawText.length}_${rawText.slice(0, 100)}`;
+  if (heuristicCache.has(cacheKey)) {
+    return heuristicCache.get(cacheKey)!;
   }
 
   const rawClauses = segmentDocumentIntoClauses(rawText);
@@ -151,7 +158,7 @@ export function analyzeDocumentHeuristics(rawText: string, docTitle?: string): C
     .filter(c => c.riskLevel === 'CRITICAL' || c.riskLevel === 'HIGH')
     .map(c => `${c.title}: ${c.whyItMatters}`);
 
-  return {
+  const report: ContractHealthReport = {
     documentId: 'custom-doc-' + Date.now(),
     title: docTitle || 'Custom Uploaded Legal Document',
     documentType: detectDocumentType(rawText),
@@ -173,6 +180,9 @@ export function analyzeDocumentHeuristics(rawText: string, docTitle?: string): C
     clauses: analyzedClauses,
     analyzedAt: new Date().toISOString().split('T')[0],
   };
+
+  heuristicCache.set(cacheKey, report);
+  return report;
 }
 
 function detectDocumentType(text: string): ContractHealthReport['documentType'] {

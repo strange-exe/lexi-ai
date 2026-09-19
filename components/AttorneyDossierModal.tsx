@@ -175,7 +175,7 @@ ${dossier.recommendedIntakeEvidence.map(e => `- [ ] ${e}`).join('\n')}
                     </span>
                   </div>
                   <p className="italic font-serif text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-900 p-2 rounded border border-slate-100 dark:border-slate-800">
-                    "{v.originalQuote}"
+                    &ldquo;{v.originalQuote}&rdquo;
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-[11px]">
                     <div>
@@ -239,7 +239,7 @@ ${dossier.recommendedIntakeEvidence.map(e => `- [ ] ${e}`).join('\n')}
 
           {/* Attorney Notice Footer */}
           <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-800 text-[11px] text-slate-500 text-center leading-relaxed">
-            Note to Attorney: This dossier was prepared using Lexi AI document comprehension heuristics to outline the client's commercial context and prioritize key issues for your legal evaluation.
+            Note to Attorney: This dossier was prepared using Lexi AI document comprehension heuristics to outline the client&apos;s commercial context and prioritize key issues for your legal evaluation.
           </div>
 
         </div>

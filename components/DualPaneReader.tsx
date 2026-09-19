@@ -257,7 +257,7 @@ export default function DualPaneReader({
                           key={idx}
                           className="flex items-start justify-between gap-3 p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-950 dark:text-emerald-200"
                         >
-                          <span className="flex-1 leading-snug">"{tip}"</span>
+                          <span className="flex-1 leading-snug">&ldquo;{tip}&rdquo;</span>
                           <button
                             onClick={() => copyToClipboard(tip, `tip-${idx}`)}
                             className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 px-2 py-1 rounded bg-emerald-500/15 transition shrink-0"
@@ -287,7 +287,7 @@ export default function DualPaneReader({
                     Verbatim Clause Text:
                   </span>
                   <blockquote className="text-xs font-serif italic text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded border border-slate-200 dark:border-slate-800">
-                    "{activeClause.originalText}"
+                    &ldquo;{activeClause.originalText}&rdquo;
                   </blockquote>
                 </div>
 

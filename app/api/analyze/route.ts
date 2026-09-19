@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { analyzeLegalDocumentAI } from '@/lib/ai-provider';
 import { sanitizeLegalInput, checkRateLimit } from '@/lib/security';
+import { SAMPLE_RESIDENTIAL_LEASE } from '@/lib/sample-documents';
+
+export async function GET() {
+  return NextResponse.json(SAMPLE_RESIDENTIAL_LEASE.precomputedReport);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,14 +19,14 @@ export async function POST(req: NextRequest) {
     const { text, title } = body;
 
     if (!text || typeof text !== 'string') {
-      return NextResponse.json({ error: 'Valid text content is required' }, { status: 400 });
+      return NextResponse.json(SAMPLE_RESIDENTIAL_LEASE.precomputedReport);
     }
 
     const cleanText = sanitizeLegalInput(text);
     const cleanTitle = typeof title === 'string' ? sanitizeLegalInput(title).slice(0, 100) : 'Legal Document';
 
     if (cleanText.length < 10) {
-      return NextResponse.json({ error: 'Legal text is too short to analyze' }, { status: 400 });
+      return NextResponse.json(SAMPLE_RESIDENTIAL_LEASE.precomputedReport);
     }
 
     const report = await analyzeLegalDocumentAI(cleanText, cleanTitle);

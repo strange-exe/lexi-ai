@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { ContractHealthReport, ComparisonResult } from '@/types/legal';
-import { analyzeDocumentHeuristics } from './legal-engine';
+import { ContractHealthReport, ComparisonResult, ChatMessage } from '@/types/legal';
+import { analyzeDocumentHeuristics, answerDocumentQuestion } from './legal-engine';
 
 /**
  * Official Google Gemini GenAI Integration Layer
@@ -137,4 +137,63 @@ Output a valid JSON object matching:
   }
 
   return null;
+}
+
+export async function answerDocumentQuestionAI(
+  question: string,
+  document: ContractHealthReport,
+  apiKeyOverride?: string
+): Promise<ChatMessage> {
+  const geminiKey = apiKeyOverride || process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+  if (geminiKey) {
+    try {
+      const genAI = new GoogleGenerativeAI(geminiKey);
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.1,
+        }
+      });
+
+      const prompt = `You are a legal comprehension copilot. Answer the following question based ONLY on the provided legal document. If the document does not contain the answer, explicitly state that you cannot locate a clause addressing it.
+Output valid JSON matching:
+{
+  "text": "grounded answer explaining the clause in plain English",
+  "citations": [
+    {
+      "clauseId": "clause-id",
+      "clauseTitle": "Clause title",
+      "quote": "exact quote from text"
+    }
+  ],
+  "suggestedFollowUps": ["question 1", "question 2"]
+}
+
+Document:
+${document.clauses.map(c => `[Clause ${c.clauseNumber}: ${c.title}]\n${c.originalText}`).join('\n\n')}
+
+User Question:
+${question}`;
+
+      const result = await model.generateContent(prompt);
+      const resText = result.response.text();
+      if (resText) {
+        const parsed = JSON.parse(resText);
+        return {
+          id: 'ai-msg-' + Date.now(),
+          sender: 'assistant',
+          text: parsed.text,
+          citations: parsed.citations,
+          suggestedFollowUps: parsed.suggestedFollowUps,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+      }
+    } catch (e) {
+      console.warn('[Lexi AI] Gemini chat failed, using local engine:', e);
+    }
+  }
+
+  return answerDocumentQuestion(question, document);
 }

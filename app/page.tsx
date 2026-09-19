@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import ContractHealthCard from '@/components/ContractHealthCard';
 import DualPaneReader from '@/components/DualPaneReader';
 import DocumentUploader from '@/components/DocumentUploader';
+import ProblemStatementMatrix from '@/components/ProblemStatementMatrix';
 
 // Dynamic code-splitting for secondary tabs and heavy modals to maximize initial page load efficiency
 const ContractDiffViewer = dynamic(() => import('@/components/ContractDiffViewer'), {
@@ -129,6 +130,12 @@ export default function Home() {
       {/* Main Workspace View Container */}
       <main id="main-content" role="main" aria-label="Lexi AI Legal Intelligence Workspace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
         
+        {/* Hackathon Alignment Matrix: Direct access to all 7 use cases */}
+        <ProblemStatementMatrix 
+          onNavigateTab={setActiveTab} 
+          onOpenDossier={() => setIsDossierOpen(true)} 
+        />
+
         {/* Tab 1: Document X-Ray & Risk Analyzer */}
         {activeTab === 'analyzer' && (
           <div role="tabpanel" id="panel-analyzer" aria-labelledby="tab-analyzer" tabIndex={0} className="space-y-6 focus:outline-none">

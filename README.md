@@ -16,15 +16,15 @@
 
 Lexi AI provides an explicit architectural layer and modular implementation for every single use case specified in the challenge:
 
-| Challenge Use Case | Implementation Module | UI Component | Automated Test |
-| :--- | :--- | :--- | :--- |
-| **1. Simplify complex legal documents** | [`lib/use-cases/simplify-legal-documents.ts`](lib/use-cases/simplify-legal-documents.ts) | `DualPaneReader.tsx` (3-tier comprehension slider: Grade 8 ELI5, Business Casual, Legal Pro) | `tests/use-cases.test.ts` (Case 1) |
-| **2. Compare contracts, agreements, or policies** | [`lib/use-cases/compare-contracts.ts`](lib/use-cases/compare-contracts.ts) | `ContractDiffViewer.tsx` (Side-by-side policy diff, delta summary, rights shift detector) | `tests/use-cases.test.ts` (Case 2) |
-| **3. Highlight important clauses, obligations, risks, or inconsistencies** | [`lib/use-cases/highlight-risks-and-obligations.ts`](lib/use-cases/highlight-risks-and-obligations.ts) | `ContractHealthCard.tsx` (Health Score 0–100, letter grade, critical gotchas, risk tiers) | `tests/use-cases.test.ts` (Case 3) |
-| **4. Answer questions based on provided legal documents** | [`lib/use-cases/document-qa-grounded.ts`](lib/use-cases/document-qa-grounded.ts) | `GroundedChatWidget.tsx` (Strict verbatim clause citations, anchored scroll, anti-hallucination refusal) | `tests/use-cases.test.ts` (Case 4) |
-| **5. Help users understand options and potential next steps** | [`lib/use-cases/options-and-next-steps.ts`](lib/use-cases/options-and-next-steps.ts) | `RightsNavigator.tsx` (Interactive dispute decision trees, statutory rights, formal demand letter generator) | `tests/use-cases.test.ts` (Case 5) |
-| **6. Generate summaries, checklists, or actionable outputs** | [`lib/use-cases/generate-actionable-outputs.ts`](lib/use-cases/generate-actionable-outputs.ts) | `ObligationTimeline.tsx` (Chronological deadlines, Markdown checklist copy, `.ics` iCalendar export) | `tests/use-cases.test.ts` (Case 6) |
-| **7. Prepare information or questions for a legal professional** | [`lib/use-cases/prepare-for-legal-professional.ts`](lib/use-cases/prepare-for-legal-professional.ts) | `AttorneyDossierModal.tsx` (Intake dossier, primary vulnerabilities, evidence checklist, 6 strategic questions) | `tests/use-cases.test.ts` (Case 7) |
+| Challenge Use Case | Implementation Module | REST API Route | UI Component | Automated Test |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Simplify complex legal documents** | [`lib/use-cases/simplify-legal-documents.ts`](lib/use-cases/simplify-legal-documents.ts) | `GET /api/simplify`<br>`POST /api/simplify` | `DualPaneReader.tsx` (3-tier comprehension slider: Grade 8 ELI5, Business Casual, Legal Pro) | `tests/use-cases.test.ts` (Case 1)<br>`tests/api-routes.test.ts` |
+| **2. Compare contracts, agreements, or policies** | [`lib/use-cases/compare-contracts.ts`](lib/use-cases/compare-contracts.ts) | `GET /api/compare`<br>`POST /api/compare` | `ContractDiffViewer.tsx` (Side-by-side policy diff, delta summary, rights shift detector) | `tests/use-cases.test.ts` (Case 2)<br>`tests/api-routes.test.ts` |
+| **3. Highlight important clauses, obligations, risks, or inconsistencies** | [`lib/use-cases/highlight-risks-and-obligations.ts`](lib/use-cases/highlight-risks-and-obligations.ts) | `GET /api/analyze`<br>`POST /api/analyze` | `ContractHealthCard.tsx` (Health Score 0–100, letter grade, critical gotchas, risk tiers) | `tests/use-cases.test.ts` (Case 3)<br>`tests/api-routes.test.ts` |
+| **4. Answer questions based on provided legal documents** | [`lib/use-cases/document-qa-grounded.ts`](lib/use-cases/document-qa-grounded.ts) | `GET /api/chat`<br>`POST /api/chat` | `GroundedChatWidget.tsx` (Strict verbatim clause citations, anchored scroll, anti-hallucination refusal) | `tests/use-cases.test.ts` (Case 4)<br>`tests/api-routes.test.ts` |
+| **5. Help users understand options and potential next steps** | [`lib/use-cases/options-and-next-steps.ts`](lib/use-cases/options-and-next-steps.ts) | `GET /api/rights`<br>`POST /api/rights` | `RightsNavigator.tsx` (Interactive dispute decision trees, statutory rights, formal demand letter generator) | `tests/use-cases.test.ts` (Case 5)<br>`tests/api-routes.test.ts` |
+| **6. Generate summaries, checklists, or actionable outputs** | [`lib/use-cases/generate-actionable-outputs.ts`](lib/use-cases/generate-actionable-outputs.ts) | `GET /api/timeline`<br>`POST /api/timeline` | `ObligationTimeline.tsx` (Chronological deadlines, Markdown checklist copy, `.ics` iCalendar export) | `tests/use-cases.test.ts` (Case 6)<br>`tests/api-routes.test.ts` |
+| **7. Prepare information or questions for a legal professional** | [`lib/use-cases/prepare-for-legal-professional.ts`](lib/use-cases/prepare-for-legal-professional.ts) | `GET /api/dossier`<br>`POST /api/dossier` | `AttorneyDossierModal.tsx` (Intake dossier, primary vulnerabilities, evidence checklist, 6 strategic questions) | `tests/use-cases.test.ts` (Case 7)<br>`tests/api-routes.test.ts` |
 
 ---
 
@@ -88,14 +88,14 @@ Lexi AI implements defense-in-depth across the application:
 
 ## 🧪 6. Automated Testing Suite
 
-Lexi AI includes 20 automated tests across 3 comprehensive suites with **100% pass rate**:
+Lexi AI includes 31 automated tests across 5 comprehensive suites with **100% pass rate**:
 
 ```bash
 npm test
 ```
 
 ### Test Suites:
-1. **`tests/legal-engine.test.ts` (Legal Intelligence Engine)**:
+1. **`tests/legal-engine.test.ts` (Legal Intelligence Engine — 7 tests)**:
    - Clause segmentation accuracy
    - Predatory clause detection & Health Score (Grade F)
    - 3-tier plain-English translation generation
@@ -103,15 +103,21 @@ npm test
    - Verbatim citation quote anchoring
    - Chronological obligation extraction
    - Attorney Dossier compilation
-2. **`tests/use-cases.test.ts` (7/7 Problem Statement Use Cases)**:
+2. **`tests/use-cases.test.ts` (7/7 Problem Statement Use Cases — 7 tests)**:
    - Verification of all 7 challenge use cases
-3. **`tests/security.test.ts` (Defensive Security & Sanitization)**:
+3. **`tests/security.test.ts` (Defensive Security & Sanitization — 6 tests)**:
    - XSS and script stripping
    - HTML entity escaping
    - Query sanitization
    - Payload DoS bounds checking
    - Prompt injection isolation delimiters
    - In-memory rate limiting enforcement
+4. **`tests/api-routes.test.ts` (REST API Endpoints Integration — 8 tests)**:
+   - Integration tests covering all 7 REST API endpoints (`/api/simplify`, `/api/compare`, `/api/analyze`, `/api/chat`, `/api/timeline`, `/api/dossier`, `/api/rights`)
+5. **`tests/efficiency-and-performance.test.ts` (Performance & Efficiency — 3 tests)**:
+   - In-memory O(1) heuristic caching verification
+   - High-throughput sub-5ms contract segmentation
+   - Anti-DoS memory bounding under stress workloads
 
 ---
 

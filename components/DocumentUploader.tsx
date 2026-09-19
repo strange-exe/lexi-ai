@@ -51,7 +51,7 @@ export default function DocumentUploader({ onAnalyze, onSelectSample, isLoading 
           <span>GenAI Document Deconstruction & Fairness Engine</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-          Understand What You Are Signing Before It's Too Late
+          Understand What You Are Signing Before It&apos;s Too Late
         </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400">
           Upload any contract, agreement, lease, or policy. Get an instant Health Score (0-100), plain-English explanations, red-flag risk alerts, and attorney consultation questions.
