@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "tsx --test tests/legal-engine.test.ts"
+    "test": "tsx --test tests/legal-engine.test.ts tests/use-cases.test.ts tests/security.test.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

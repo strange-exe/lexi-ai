@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ContractHealthReport, ChatMessage } from '@/types/legal';
 import { answerDocumentQuestion } from '@/lib/legal-engine';
 import { 
@@ -36,7 +36,7 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = async (queryText?: string) => {
+  const handleSend = useCallback(async (queryText?: string) => {
     const q = queryText || inputQuery;
     if (!q.trim()) return;
 
@@ -62,7 +62,7 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
       console.error(err);
       setIsTyping(false);
     }
-  };
+  }, [inputQuery, document]);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-[750px]">
@@ -90,7 +90,12 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
       </div>
 
       {/* Message Stream */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs sm:text-sm">
+      <div 
+        role="log" 
+        aria-live="polite" 
+        aria-label="Conversation with Grounded Legal Assistant"
+        className="flex-1 p-4 overflow-y-auto space-y-4 text-xs sm:text-sm"
+      >
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -197,6 +202,7 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
         >
           <input
             type="text"
+            aria-label="Ask a question about this legal document"
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Ask anything about this agreement (e.g. Can I terminate early?)"
@@ -204,11 +210,12 @@ export default function GroundedChatWidget({ document, onSelectClause }: Grounde
           />
           <button
             type="submit"
+            aria-label="Send question"
             disabled={!inputQuery.trim()}
             className="bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white px-4 py-2.5 rounded-xl font-medium text-xs sm:text-sm flex items-center gap-1.5 transition active:scale-95 shrink-0 shadow-sm"
           >
             <span>Ask</span>
-            <Send className="w-3.5 h-3.5" />
+            <Send className="w-3.5 h-3.5" aria-hidden="true" />
           </button>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { ClauseAnalysis, RiskLevel, ClauseCategory } from '@/types/legal';
 import { 
   AlertCircle, 
@@ -30,18 +30,22 @@ export default function DualPaneReader({
   const [filterRisk, setFilterRisk] = useState<string>('ALL');
   const [copiedTip, setCopiedTip] = useState<string | null>(null);
 
-  const activeClause = clauses.find(c => c.id === selectedClauseId) || clauses[0];
+  const activeClause = useMemo(() => {
+    return clauses.find(c => c.id === selectedClauseId) || clauses[0];
+  }, [clauses, selectedClauseId]);
 
-  const filteredClauses = clauses.filter(c => {
-    if (filterRisk === 'ALL') return true;
-    if (filterRisk === 'HIGH_RISK') return c.riskLevel === 'CRITICAL' || c.riskLevel === 'HIGH';
-    if (filterRisk === 'PAYMENT') return c.category === 'PAYMENT';
-    if (filterRisk === 'TERMINATION') return c.category === 'TERMINATION';
-    if (filterRisk === 'INDEMNITY') return c.category === 'INDEMNITY' || c.category === 'LIABILITY';
-    return c.riskLevel === filterRisk;
-  });
+  const filteredClauses = useMemo(() => {
+    return clauses.filter(c => {
+      if (filterRisk === 'ALL') return true;
+      if (filterRisk === 'HIGH_RISK') return c.riskLevel === 'CRITICAL' || c.riskLevel === 'HIGH';
+      if (filterRisk === 'PAYMENT') return c.category === 'PAYMENT';
+      if (filterRisk === 'TERMINATION') return c.category === 'TERMINATION';
+      if (filterRisk === 'INDEMNITY') return c.category === 'INDEMNITY' || c.category === 'LIABILITY';
+      return c.riskLevel === filterRisk;
+    });
+  }, [clauses, filterRisk]);
 
-  const getRiskBadge = (risk: RiskLevel) => {
+  const getRiskBadge = useCallback((risk: RiskLevel) => {
     switch (risk) {
       case 'CRITICAL':
         return 'bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30';
@@ -54,13 +58,13 @@ export default function DualPaneReader({
       default:
         return 'bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30';
     }
-  };
+  }, []);
 
-  const copyToClipboard = (text: string, id: string) => {
+  const copyToClipboard = useCallback((text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedTip(id);
     setTimeout(() => setCopiedTip(null), 2000);
-  };
+  }, []);
 
   return (
     <div className="space-y-3">

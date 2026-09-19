@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { DisputeScenario } from '@/types/legal';
 import { DISPUTE_SCENARIOS } from '@/lib/sample-documents';
 import { 
@@ -18,13 +18,15 @@ export default function RightsNavigator() {
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(DISPUTE_SCENARIOS[0].id);
   const [copiedLetter, setCopiedLetter] = useState(false);
 
-  const activeScenario = DISPUTE_SCENARIOS.find(s => s.id === selectedScenarioId) || DISPUTE_SCENARIOS[0];
+  const activeScenario = useMemo(() => {
+    return DISPUTE_SCENARIOS.find(s => s.id === selectedScenarioId) || DISPUTE_SCENARIOS[0];
+  }, [selectedScenarioId]);
 
-  const copyLetter = () => {
+  const copyLetter = useCallback(() => {
     navigator.clipboard.writeText(activeScenario.demandLetterSnippet);
     setCopiedLetter(true);
     setTimeout(() => setCopiedLetter(false), 2000);
-  };
+  }, [activeScenario.demandLetterSnippet]);
 
   return (
     <div className="space-y-4">
@@ -32,7 +34,7 @@ export default function RightsNavigator() {
       {/* Scenario Selector Header */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
         <div className="flex items-center gap-2">
-          <Scale className="w-5 h-5 text-indigo-600" />
+          <Scale className="w-5 h-5 text-indigo-600" aria-hidden="true" />
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
               Rights & Next Steps Diagnostic Navigator
@@ -44,12 +46,15 @@ export default function RightsNavigator() {
         </div>
 
         {/* Scenario Pills */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div role="tablist" aria-label="Dispute Scenarios" className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {DISPUTE_SCENARIOS.map((s) => (
             <button
               key={s.id}
+              role="tab"
+              aria-selected={selectedScenarioId === s.id}
+              aria-label={`${s.title}: ${s.subtitle}`}
               onClick={() => setSelectedScenarioId(s.id)}
-              className={`text-left p-3.5 rounded-xl border transition flex flex-col justify-between ${
+              className={`text-left p-3.5 rounded-xl border transition flex flex-col justify-between focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 selectedScenarioId === s.id
                   ? 'bg-blue-50/70 dark:bg-blue-950/40 border-blue-500 ring-1 ring-blue-500'
                   : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-blue-300'

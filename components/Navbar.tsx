@@ -93,64 +93,84 @@ export default function Navbar({
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="flex space-x-1 sm:space-x-4 overflow-x-auto pb-2 scrollbar-none text-xs sm:text-sm border-t border-slate-800/80 pt-2">
+        <nav role="tablist" aria-label="Main Navigation Tabs" className="flex space-x-1 sm:space-x-4 overflow-x-auto pb-2 scrollbar-none text-xs sm:text-sm border-t border-slate-800/80 pt-2">
           <button
+            role="tab"
+            aria-selected={activeTab === 'analyzer'}
+            aria-controls="panel-analyzer"
+            id="tab-analyzer"
             onClick={() => setActiveTab('analyzer')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               activeTab === 'analyzer'
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <FileText className="w-4 h-4" />
+            <FileText className="w-4 h-4" aria-hidden="true" />
             <span>Document X-Ray & Risks</span>
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'compare'}
+            aria-controls="panel-compare"
+            id="tab-compare"
             onClick={() => setActiveTab('compare')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               activeTab === 'compare'
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <GitCompare className="w-4 h-4" />
+            <GitCompare className="w-4 h-4" aria-hidden="true" />
             <span>Compare Policies & Redlines</span>
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'chat'}
+            aria-controls="panel-chat"
+            id="tab-chat"
             onClick={() => setActiveTab('chat')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               activeTab === 'chat'
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <MessageSquareCode className="w-4 h-4" />
+            <MessageSquareCode className="w-4 h-4" aria-hidden="true" />
             <span>Grounded Q&A</span>
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'timeline'}
+            aria-controls="panel-timeline"
+            id="tab-timeline"
             onClick={() => setActiveTab('timeline')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               activeTab === 'timeline'
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <Calendar className="w-4 h-4" />
+            <Calendar className="w-4 h-4" aria-hidden="true" />
             <span>Obligation Timeline</span>
           </button>
 
           <button
+            role="tab"
+            aria-selected={activeTab === 'rights'}
+            aria-controls="panel-rights"
+            id="tab-rights"
             onClick={() => setActiveTab('rights')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg font-medium transition whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-blue-500 ${
               activeTab === 'rights'
-                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
+                ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40 shadow-sm'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
             }`}
           >
-            <HelpCircle className="w-4 h-4" />
+            <HelpCircle className="w-4 h-4" aria-hidden="true" />
             <span>Rights & Next Steps</span>
           </button>
         </nav>

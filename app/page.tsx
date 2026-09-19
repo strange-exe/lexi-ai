@@ -1,16 +1,27 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import ContractHealthCard from '@/components/ContractHealthCard';
 import DualPaneReader from '@/components/DualPaneReader';
-import ContractDiffViewer from '@/components/ContractDiffViewer';
-import GroundedChatWidget from '@/components/GroundedChatWidget';
-import ObligationTimeline from '@/components/ObligationTimeline';
-import RightsNavigator from '@/components/RightsNavigator';
-import AttorneyDossierModal from '@/components/AttorneyDossierModal';
-import WhyLexiBridgeModal from '@/components/WhyLexiBridgeModal';
 import DocumentUploader from '@/components/DocumentUploader';
+
+// Dynamic code-splitting for secondary tabs and heavy modals to maximize initial page load efficiency
+const ContractDiffViewer = dynamic(() => import('@/components/ContractDiffViewer'), {
+  loading: () => <div className="p-8 text-center text-slate-400 text-sm">Loading Policy Redliner...</div>,
+});
+const GroundedChatWidget = dynamic(() => import('@/components/GroundedChatWidget'), {
+  loading: () => <div className="p-8 text-center text-slate-400 text-sm">Initializing Grounded Assistant...</div>,
+});
+const ObligationTimeline = dynamic(() => import('@/components/ObligationTimeline'), {
+  loading: () => <div className="p-8 text-center text-slate-400 text-sm">Loading Obligation Timeline...</div>,
+});
+const RightsNavigator = dynamic(() => import('@/components/RightsNavigator'), {
+  loading: () => <div className="p-8 text-center text-slate-400 text-sm">Loading Rights Navigator...</div>,
+});
+const AttorneyDossierModal = dynamic(() => import('@/components/AttorneyDossierModal'));
+const WhyLexiBridgeModal = dynamic(() => import('@/components/WhyLexiBridgeModal'));
 
 import { 
   SAMPLE_RESIDENTIAL_LEASE, 
@@ -36,7 +47,7 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Load a demo scenario
-  const handleLoadSample = (sampleId: 'lease' | 'freelance' | 'compare') => {
+  const handleLoadSample = useCallback((sampleId: 'lease' | 'freelance' | 'compare') => {
     if (sampleId === 'lease') {
       setCurrentReport(SAMPLE_RESIDENTIAL_LEASE.precomputedReport);
       setCurrentObligations(SAMPLE_RESIDENTIAL_LEASE.obligations);
@@ -52,10 +63,10 @@ export default function Home() {
     } else if (sampleId === 'compare') {
       setActiveTab('compare');
     }
-  };
+  }, []);
 
   // Analyze custom uploaded document
-  const handleAnalyzeCustom = async (text: string, title?: string) => {
+  const handleAnalyzeCustom = useCallback(async (text: string, title?: string) => {
     setIsAnalyzing(true);
     try {
       const res = await fetch('/api/analyze', {
@@ -95,12 +106,12 @@ export default function Home() {
       setIsAnalyzing(false);
       setActiveTab('analyzer');
     }
-  };
+  }, []);
 
-  const handleSelectClause = (clauseId: string) => {
+  const handleSelectClause = useCallback((clauseId: string) => {
     setSelectedClauseId(clauseId);
     setActiveTab('analyzer');
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
@@ -116,11 +127,11 @@ export default function Home() {
       />
 
       {/* Main Workspace View Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
+      <main id="main-content" role="main" aria-label="Lexi AI Legal Intelligence Workspace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
         
         {/* Tab 1: Document X-Ray & Risk Analyzer */}
         {activeTab === 'analyzer' && (
-          <div className="space-y-6">
+          <div role="tabpanel" id="panel-analyzer" aria-labelledby="tab-analyzer" tabIndex={0} className="space-y-6 focus:outline-none">
             <DocumentUploader
               onAnalyze={handleAnalyzeCustom}
               onSelectSample={handleLoadSample}
@@ -142,14 +153,14 @@ export default function Home() {
 
         {/* Tab 2: Side-by-Side Comparison & Redlines */}
         {activeTab === 'compare' && (
-          <div className="space-y-6">
+          <div role="tabpanel" id="panel-compare" aria-labelledby="tab-compare" tabIndex={0} className="space-y-6 focus:outline-none">
             <ContractDiffViewer initialData={SAMPLE_COMPARISON_DATA} />
           </div>
         )}
 
         {/* Tab 3: Grounded Q&A Assistant */}
         {activeTab === 'chat' && (
-          <div className="space-y-6">
+          <div role="tabpanel" id="panel-chat" aria-labelledby="tab-chat" tabIndex={0} className="space-y-6 focus:outline-none">
             <GroundedChatWidget
               document={currentReport}
               onSelectClause={handleSelectClause}
@@ -159,7 +170,7 @@ export default function Home() {
 
         {/* Tab 4: Obligation & Deadline Timeline */}
         {activeTab === 'timeline' && (
-          <div className="space-y-6">
+          <div role="tabpanel" id="panel-timeline" aria-labelledby="tab-timeline" tabIndex={0} className="space-y-6 focus:outline-none">
             <ObligationTimeline
               obligations={currentObligations}
               documentTitle={currentReport.title}
@@ -169,12 +180,12 @@ export default function Home() {
 
         {/* Tab 5: Rights & Diagnostic Navigator */}
         {activeTab === 'rights' && (
-          <div className="space-y-6">
+          <div role="tabpanel" id="panel-rights" aria-labelledby="tab-rights" tabIndex={0} className="space-y-6 focus:outline-none">
             <RightsNavigator />
           </div>
         )}
 
-      </div>
+      </main>
 
       {/* Attorney Consultation Intake Dossier Modal */}
       <AttorneyDossierModal

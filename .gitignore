@@ -31,10 +31,6 @@ yarn-error.log*
 *.sln
 *.sw?
 
-# Temporary & Test files
+# Temporary files
 coverage/
 *.tsbuildinfo
-
-VIDEO_DEMO_SCRIPT.md 
-
-tests/
