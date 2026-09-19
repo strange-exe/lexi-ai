@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production / Build outputs
+.next/
+out/
+build/
+dist/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local environment files (Prevent accidental secret leaks)
+.env*.local
+.env
+.env.production
+
+# System files & IDEs
+.DS_Store
+*.pem
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary & Test files
+coverage/
+*.tsbuildinfo
+
+VIDEO_DEMO_SCRIPT.md 
+
+tests/
